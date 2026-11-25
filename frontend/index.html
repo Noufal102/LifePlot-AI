@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifePlot AI | Daily Intelligence</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">✦</span>
+      <div>
+        <b>LifePlot AI</b>
+        <small>Daily Intelligence</small>
+      </div>
+    </div>
+
+    <nav>
+      <a class="active" href="#overview">▦ &nbsp; Overview</a>
+      <a href="#add">＋ &nbsp; Add Activity</a>
+      <a href="#prediction">✧ &nbsp; AI Prediction</a>
+      <a href="#dailyInsights">✦ &nbsp; Daily Insights</a>
+      <a href="#history">◷ &nbsp; Activity History</a>
+      <a href="#predictionHistory">◷ &nbsp; Prediction History</a>
+      <a href="#modelPerformance">▥ &nbsp; Model Performance</a>
+    </nav>
+
+    <div class="side-note">
+      Your day, understood better.
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- Dashboard Header -->
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">PERSONAL AI ASSISTANT</p>
+        <h1>Good day 👋</h1>
+        <p class="muted">
+          Understand your routine. Make better decisions.
+        </p>
+      </div>
+
+      <div class="date-pill" id="today"></div>
+    </header>
+
+    <!-- Dashboard Statistics -->
+    <section id="overview" class="stats">
+      <article class="stat">
+        <span>Total activities</span>
+        <strong id="totalActivities">0</strong>
+        <small>Logged entries</small>
+      </article>
+
+      <article class="stat">
+        <span>Time tracked</span>
+        <strong id="totalTime">0h 0m</strong>
+        <small>Total duration</small>
+      </article>
+
+      <article class="stat">
+        <span>AI status</span>
+        <strong class="status">Ready</strong>
+        <small>Transformer engine</small>
+      </article>
+    </section>
+
+    <!-- Add Activity -->
+    <section class="panel" id="add">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">ACTIVITY TRACKER</p>
+          <h2>Log an activity</h2>
+        </div>
+        <span class="tag">New entry</span>
+      </div>
+
+      <form id="activityForm" class="form-grid">
+        <label>
+          Activity
+          <select id="activity" required></select>
+        </label>
+
+        <label>
+          Duration (minutes)
+          <input id="duration" type="number" min="1" max="1440" value="30" required>
+        </label>
+
+        <label>
+          Energy level
+          <select id="energy">
+            <option value="1">1 - Very low</option>
+            <option value="2">2 - Low</option>
+            <option value="3" selected>3 - Normal</option>
+            <option value="4">4 - High</option>
+            <option value="5">5 - Very high</option>
+          </select>
+        </label>
+
+        <label>
+          Priority
+          <select id="priority">
+            <option value="1">1 - Low</option>
+            <option value="2">2</option>
+            <option value="3" selected>3 - Medium</option>
+            <option value="4">4</option>
+            <option value="5">5 - High</option>
+          </select>
+        </label>
+
+        <button class="primary full" type="submit">
+          ＋ Save activity
+        </button>
+      </form>
+
+      <p id="formMessage" class="message"></p>
+    </section>
+
+    <!-- AI Prediction -->
+    <section class="panel" id="prediction">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">TRANSFORMER INTELLIGENCE</p>
+          <h2>Next activity prediction</h2>
+        </div>
+
+        <button class="secondary" id="predictBtn">
+          ✧ Predict next
+        </button>
+      </div>
+
+      <!-- Main Prediction -->
+      <div class="prediction-card">
+        <div class="spark">✦</div>
+        <div>
+          <span class="muted">PREDICTED ACTIVITY</span>
+          <h2 id="predictedActivity">Add activities to get started</h2>
+          <p id="suggestion">
+            Your assistant will analyse your recent activity sequence.
+          </p>
+          <small id="confidence"></small>
+        </div>
+      </div>
+
+      <!-- Top 3 Predictions -->
+      <div class="top-predictions-section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">ALTERNATIVE PREDICTIONS</p>
+            <h2>Top 3 Possible Next Activities</h2>
+            <p class="muted">
+              Other likely activities predicted by the Transformer model.
+            </p>
+          </div>
+        </div>
+
+        <div id="topPredictions">
+          <p class="muted">
+            Click Predict next to see the top 3 predictions.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Daily Insights -->
+    <section class="panel" id="dailyInsights">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">DAILY INTELLIGENCE</p>
+          <h2>Your daily insights</h2>
+          <small class="muted">Based on your activities from the last 24 hours</small>
+        </div>
+
+        <button class="secondary" id="dailyInsightsRefreshBtn">
+          ↻ Refresh
+        </button>
+      </div>
+
+      <div class="stats">
+        <article class="stat">
+          <span>Activities logged</span>
+          <strong id="insightTotalActivities">--</strong>
+          <small>Last 24 hours</small>
+        </article>
+
+        <article class="stat">
+          <span>Time tracked</span>
+          <strong id="insightTotalMinutes">--</strong>
+          <small>Total minutes</small>
+        </article>
+
+        <article class="stat">
+          <span>Average energy</span>
+          <strong id="insightAverageEnergy">--</strong>
+          <small>Out of 5</small>
+        </article>
+
+        <article class="stat">
+          <span>High priority</span>
+          <strong id="insightHighPriority">--</strong>
+          <small>Priority activities</small>
+        </article>
+      </div>
+
+      <div class="prediction-card">
+        <div class="spark">✦</div>
+        <div>
+          <span class="muted">MOST COMMON ACTIVITY</span>
+          <h2 id="insightMostCommon">Loading...</h2>
+          <p>Your most frequently logged activity in the last 24 hours.</p>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <h2>Activity insights</h2>
+          <p class="muted">What your recent routine tells us</p>
+        </div>
+      </div>
+
+      <ul id="dailyInsightsList">
+        <li>Loading daily insights...</li>
+      </ul>
+
+      <div class="section-head">
+        <div>
+          <h2>AI recommendations</h2>
+          <p class="muted">Suggestions to improve your daily routine</p>
+        </div>
+      </div>
+
+      <ul id="dailyRecommendationsList">
+        <li>Loading recommendations...</li>
+      </ul>
+
+      <p id="dailyInsightsMessage" class="message"></p>
+    </section>
+
+    <!-- Activity Distribution -->
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">YOUR ROUTINE</p>
+          <h2>Activity distribution</h2>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="activityChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Activity History -->
+    <section class="panel" id="history">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">RECENT LOGS</p>
+          <h2>Activity history</h2>
+        </div>
+
+        <button class="secondary" id="refreshBtn">
+          ↻ Refresh
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>Duration</th>
+              <th>Energy</th>
+              <th>Priority</th>
+              <th>Logged at</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody id="historyBody">
+            <tr>
+              <td colspan="6">No activities yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Prediction History -->
+    <section class="panel" id="predictionHistory">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">TRANSFORMER RECORDS</p>
+          <h2>Prediction history</h2>
+        </div>
+
+        <button class="secondary" id="predictionHistoryRefreshBtn">
+          ↻ Refresh
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Predicted activity</th>
+              <th>Confidence</th>
+              <th>AI suggestion</th>
+              <th>Predicted at</th>
+            </tr>
+          </thead>
+
+          <tbody id="predictionHistoryBody">
+            <tr>
+              <td colspan="4">Loading prediction history...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p id="predictionHistoryMessage" class="message"></p>
+    </section>
+
+    <!-- Model Performance Dashboard -->
+    <section class="panel" id="modelPerformance">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">MODEL EVALUATION</p>
+          <h2>Model performance</h2>
+          <small class="muted">Synthetic evaluation dataset · Multiple seeds</small>
+        </div>
+      </div>
+
+      <div class="stats">
+        <article class="stat">
+          <span>Transformer Accuracy</span>
+          <strong id="transformerAccuracy">--</strong>
+          <small>Evaluation accuracy</small>
+        </article>
+
+        <article class="stat">
+          <span>Transformer Macro F1</span>
+          <strong id="transformerF1">--</strong>
+          <small>Balanced F1 score</small>
+        </article>
+
+        <article class="stat">
+          <span>Random Forest Macro F1</span>
+          <strong id="randomForestF1">--</strong>
+          <small>Baseline comparison</small>
+        </article>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <h2>Transformer vs Random Forest</h2>
+          <p class="muted">Macro F1 comparison</p>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="modelComparisonChart"></canvas>
+      </div>
+
+      <p id="modelPerformanceMessage" class="message">
+        Loading model evaluation metrics...
+      </p>
+    </section>
+
+    <footer>
+      LifePlot AI · Predictions are estimates, not guarantees or professional advice.
+    </footer>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
